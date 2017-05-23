@@ -37,6 +37,7 @@ public:
     struct response resStr_Get;
     CURLcode res_Get;
     std::shared_ptr<Document> quoteDetail;
+    std::shared_ptr<Document> instrumentDetail;
     std::mutex m;
 
 public:
@@ -53,7 +54,7 @@ public:
     void Init();
     void init_string(struct response *s);
     static size_t writefunc(void *ptr, size_t size, size_t nmemb,  struct response *s);
-    std::string GetInstrument();
+    std::string GetInstrument(std::string ticker);
     std::unique_ptr<Document> CancelOrder(std::string url);
     std::string GetOrder(std::string ticker);
     std::unique_ptr<rapidjson::Document> GetOrderStatus(std::string ticker);

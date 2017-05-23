@@ -26,18 +26,22 @@ int main(void)
 //    api.Init();
 //    shared_ptr<Document> quotes (new rapidjson::Document());
 //    quotes.reset();
-//    quotes = api.GetQuote("CHK");
-//    std::cout<<quotes->operator[]("ask_price").GetString()<<std::endl;
+    //quotes = api.GetQuote("CHK");
+    //std::cout<<quotes->operator[]("ask_price").GetString()<<std::endl;
+    //std::cout<<api.GetInstrument("CHK");
+    //PriceMomentumSingleSec obj("TDW");
+    //obj.posStatus = util::ProcessingNewTrade;
+    //obj.OpenNewPosition();
 
 //    quotes.reset();
 //    quotes = api.GetQuote("NFLX");
 //    std::cout<<quotes->operator[]("ask_price").GetString()<<std::endl;
-    const unsigned int bo_len = 10*60; //number of minutes during which the price has been moving in the same direction
-    const float chgspd_trg = 0.007 / 15.00 / 60.00;
-    const int negResponse_trg = 5;
-    const float retTrg = 0.1/100;
-    const int timeWindowForExit = 10*60; //the wider this window, the more risky is the strategy
-    const long int secToFormStrategy = 10*60;
+//    const unsigned int bo_len = 10*60; //number of minutes during which the price has been moving in the same direction
+//    const float chgspd_trg = 0.007 / 15.00 / 60.00;
+//    const int negResponse_trg = 5;
+//    const float retTrg = 0.1/100;
+//    const int timeWindowForExit = 10*60; //the wider this window, the more risky is the strategy
+//    const long int secToFormStrategy = 10*60;
     //PriceMomentumSingleSec priceMom("VXX",bo_len, chgspd_trg, secToFormStrategy,  negResponse_trg,  retTrg,  timeWindowForExit);
 
 
@@ -48,15 +52,20 @@ int main(void)
                        (std::istreambuf_iterator<char>()    ) );
     Document document;
     document.Parse(content.c_str());
-    string tickers = document["ticker"].GetString();
+    file.close();
+   string tickers = document["ticker"].GetString();
+   //tickers =
     boost::split(tickerList,tickers, boost::is_any_of(","));
 
     vector<shared_ptr<thread>> threadList;
     vector<shared_ptr<PriceMomentumSingleSec>> strategyList;
-    RHApiCPP* obj = new RHApiCPP();
+    std::cout<<tickers<<"."<<std::endl;
+    //RHApiCPP* obj = new RHApiCPP();
+    //obj->Init();
+    //std::cout<<obj->GetQuote("AVP");
     //usleep(4000000);
-    PriceMomentumSingleSec* obj2 = new PriceMomentumSingleSec("NFLX");
-    //obj2.Run();
+    //PriceMomentumSingleSec* obj2 = new PriceMomentumSingleSec("NFLX");
+    //obj2->Run();
     //obj.FetchMktData();
     //std::thread t1(&RHApiCPP::GetQuote, obj,"BAC");
     //std::thread t2(&PriceMomentumSingleSec::FetchMktData, obj2);
@@ -66,18 +75,25 @@ int main(void)
 
     for(auto it = tickerList.begin(); it != tickerList.end(); ++it)
     {
-        //std::cout<<*it<<endl;
+        std::cout<<*it<<endl;
         //PriceMomentumSingleSec* obj= new PriceMomentumSingleSec(*it);
         //objList.push_back(obj);
         //std::thread*  threadObj = new thread(&PriceMomentumSingleSec::Run, new PriceMomentumSingleSec(*it));
         //threadObj->join();
+if(*it != "")
+{
+
+
         strategyList.push_back(make_shared<PriceMomentumSingleSec>(*it));
         threadList.push_back(make_shared<thread>(&PriceMomentumSingleSec::Run,strategyList[count].get()));
+
+
         //threadList.push_back(new thread(&PriceMomentumSingleSec::FetchMktData, new PriceMomentumSingleSec(*it)));
         //threadList.push_back(threadObj);
         //threadList[count]->join();
         //std::cout<<"end"<<endl;
         count++;
+}
     }
 
     for(auto it = threadList.begin(); it != threadList.end();++it)

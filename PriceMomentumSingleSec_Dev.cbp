@@ -65,8 +65,6 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="BrokerUtil.cpp" />
-		<Unit filename="BrokerUtil.hpp" />
 		<Unit filename="DrafCode.hpp" />
 		<Unit filename="MarketDataPoint.cpp" />
 		<Unit filename="MarketDataPoint.hpp" />
@@ -83,6 +81,8 @@
 		<Unit filename="RawMarketDataPoint.hpp" />
 		<Unit filename="Strategy.hpp" />
 		<Unit filename="StrategyExecution.hpp" />
+		<Unit filename="Utility.cpp" />
+		<Unit filename="Utility.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

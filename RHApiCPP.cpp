@@ -12,6 +12,7 @@ RHApiCPP::RHApiCPP()
 {
     Init();
 }
+
 void RHApiCPP::Init()
 {
     curl_global_init(CURL_GLOBAL_ALL);
@@ -42,6 +43,7 @@ void RHApiCPP::Init()
             /*separate the inintialization for curl_get */
 
     quoteDetail = std::make_shared<Document>();
+    instrumentDetail = std::make_shared<Document>();
     init_string(&resStr_Get);
     res_Get =  CURLE_OK;
     curl_Get = curl_easy_init();
@@ -140,7 +142,6 @@ size_t RHApiCPP::writefunc(void *ptr, size_t size, size_t nmemb,  struct respons
     s->len = new_len;
 
     return size*nmemb;
-
 }
 
 void RHApiCPP::init_string(struct response *s)
@@ -156,20 +157,47 @@ void RHApiCPP::init_string(struct response *s)
     s->ptr[0] = '\0';
 }
 
-std::string RHApiCPP::GetInstrument()
+std::string RHApiCPP::GetInstrument(std::string ticker)
 {
-    curl_easy_setopt(curl, CURLOPT_URL, "https://api.robinhood.com/instruments/AVP/");
+    std::string url = "https://api.robinhood.com/instruments/?symbol=" + ticker;
+      std::string instrumentURL;
+
     //struct response s;
-    //init_string(&s);
+    //init_string(&resStr_Get);
     //CURLcode res;
-    struct response resStr;
-    init_string(&resStr);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &resStr);
+    //struct response resStr;
+    init_string(&resStr_Get);
+    if(curl_Get)
+    {
+        curl_easy_setopt(curl_Get, CURLOPT_URL, url.c_str());
+        curl_easy_setopt(curl_Get,CURLOPT_WRITEFUNCTION,writefunc);
+        curl_easy_setopt(curl_Get, CURLOPT_WRITEDATA, &resStr_Get);
+    }
 
+    try
+    {
+        resCode = curl_easy_perform(curl_Get);
+    instrumentDetail->Parse(resStr_Get.ptr);
+    if(instrumentDetail->operator[]("results").Capacity() != 0)
+    {
+//std::cout<<resStr_Get.ptr<<std::endl;
 
-    resCode = curl_easy_perform(curl);
+instrumentURL = instrumentDetail->operator[]("results")[0]["url"].GetString(); //<<std::endl;
+    }
+    else
+    {
+        //std::cout<<resStr_Get.ptr<<std::endl;
+        instrumentURL = " ";
+    }
+    }
+    catch(...)
+{
 
-    return std::string(resStr.ptr);
+    //std::cout<<resStr_Get.ptr<<std::endl;
+    std::cout<<"exception"<<std::endl;
+    }
+
+    return instrumentURL;
 }
 
 std::unique_ptr<Document> RHApiCPP::CancelOrder(std::string orderID)
@@ -189,6 +217,8 @@ std::unique_ptr<Document> RHApiCPP::CancelOrder(std::string orderID)
 
     while(orderState != "filled" && orderState != "canceled")
     {
+        usleep(2000000);
+        resCode = curl_easy_perform(curl);
         orderStatus.reset();
         orderStatus = GetOrderStatus(orderID);
         orderState = orderStatus->operator[]("state").GetString();
@@ -204,11 +234,10 @@ std::shared_ptr<Document> RHApiCPP::GetQuote(std::string ticker)
     init_string(&resStr_Get);
     std::string url = "https://api.robinhood.com/quotes/" + ticker + "/";
     //std::cout<<url<<std::endl;
-    curl_easy_setopt(curl_Get, CURLOPT_URL, url.c_str());
-
 
     if(curl_Get)
     {
+        curl_easy_setopt(curl_Get, CURLOPT_URL, url.c_str());
         curl_easy_setopt(curl_Get, CURLOPT_WRITEFUNCTION, writefunc);
         curl_easy_setopt(curl_Get, CURLOPT_WRITEDATA, &resStr_Get);
     }
@@ -219,16 +248,15 @@ std::shared_ptr<Document> RHApiCPP::GetQuote(std::string ticker)
     /* Perform the request, res will get the return code */
     //m.lock();
     res_Get = curl_easy_perform(curl_Get);
+    while(res_Get != CURLE_OK)
+    {
+        usleep(5000000);
+        res_Get = curl_easy_perform(curl_Get);
+    }
     //m.unlock();
     //std::cout<<ticker<<std::endl;
-
-    /* Check for errors */
-    if(res_Get != CURLE_OK)
-        fprintf(stderr, "curl_easy_perform() failed: %s\n",
-                curl_easy_strerror(res_Get));
     //std::unique_ptr<Document> orderDetail(new Document());
     quoteDetail->Parse(resStr_Get.ptr);
-
     return quoteDetail;
 }
 
@@ -259,12 +287,18 @@ std::unique_ptr<Document> RHApiCPP::GetOrderStatus(std::string orderID)
     std::vector<std::string> temp;
     init_string(&resStr);
     curl_easy_setopt(curl, CURLOPT_POST, 0); //reset option because this is not a post request
-    orderID = "919cb0f2-6a09-4ad2-b639-53652dd014bf";
+    //orderID = "919cb0f2-6a09-4ad2-b639-53652dd014bf";
     std::string url = "https://api.robinhood.com/orders/" + orderID + "/"; //919cb0f2-6a09-4ad2-b639-53652dd014bf
     curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &resStr);
     resCode = curl_easy_perform(curl);
 
+    /**retry every 5 seconds if the connection failed*/
+    while(resCode != CURLE_OK)
+    {
+        usleep(2000000);
+        resCode = curl_easy_perform(curl);
+    }
     /*
     status = std::string(resStr.ptr);
     //std::cout<<status<<std::endl;

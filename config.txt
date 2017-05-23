@@ -1,10 +1,19 @@
 {
-	"ticker": "AVP,CHK,BAC",
 	"targetchangespeed": 0.000007778,
 	"targetchangeduration": 600,
 	"targetreturn": 0.001,
 	"timewindowforexit": 600,
+
 	"ordertype": "limit",
 	"time_in_force": "gfd",
-	"trigger": "immediate"
+	"trigger": "immediate",
+        "sharesEachTrade": 10,
+	"rhSellingFee": 0.02,
+
+	"delay_place_new_order": 60000000,
+	"delay_close_order": 30000000,
+	"delay_cancel_order": 5000000,
+	"delay_positionstatus_check": 3000000,
+	"delay_strategy_check": 3000000,
+	"delay_fetch_marketdata": 50000000
 }

@@ -39238,12 +39238,12 @@
 1483416920 source:/home/colin/Production/PriceMomentumSingleSec/RawMarketDataPoint.cpp
 	"RawMarketDataPoint.hpp"
 
-1480889266 source:/home/colin/Development/PriceMomentumSingleSec_Dev/BrokerUtil.cpp
+1493089866 source:/home/colin/Development/PriceMomentumSingleSec_Dev/BrokerUtil.cpp
 	"BrokerUtil.hpp"
 
 1484451444 /home/colin/Development/PriceMomentumSingleSec_Dev/BrokerUtil.hpp
 
-1492400996 source:/home/colin/Development/PriceMomentumSingleSec_Dev/main.cpp
+1495460630 source:/home/colin/Development/PriceMomentumSingleSec_Dev/main.cpp
 	<stdio.h>
 	<stdlib.h>
 	<cstring>
@@ -39288,10 +39288,10 @@
 
 1483323424 /home/colin/Development/PriceMomentumSingleSec_Dev/RawMarketDataPoint.hpp
 
-1492396507 source:/home/colin/Development/PriceMomentumSingleSec_Dev/PriceMomentumSingleSec.cpp
+1495418238 source:/home/colin/Development/PriceMomentumSingleSec_Dev/PriceMomentumSingleSec.cpp
 	"PriceMomentumSingleSec.hpp"
 
-1491965926 /home/colin/Development/PriceMomentumSingleSec_Dev/PriceMomentumSingleSec.hpp
+1494181075 /home/colin/Development/PriceMomentumSingleSec_Dev/PriceMomentumSingleSec.hpp
 	<vector>
 	<deque>
 	<tuple>
@@ -39312,11 +39312,11 @@
 	<ctime>
 	<cstdio>
 	"MarketDataPoint.hpp"
-	"BrokerUtil.hpp"
+	"Utility.hpp"
 	"Strategy.hpp"
 	"RHApiCPP.hpp"
 	"RawMarketDataPoint.hpp"
-	"BrokerUtil.hpp"
+	"Utility.hpp"
 	"RHApiPy.hpp"
 	"rapidjson/document.h"
 	<atomic>
@@ -39325,7 +39325,7 @@
 1487532721 /home/colin/Development/PriceMomentumSingleSec_Dev/Strategy.hpp
 	<string>
 
-1492384859 /home/colin/Development/PriceMomentumSingleSec_Dev/RHApiCPP.hpp
+1493001009 /home/colin/Development/PriceMomentumSingleSec_Dev/RHApiCPP.hpp
 	<stdio.h>
 	<stdlib.h>
 	<cstring>
@@ -39454,7 +39454,7 @@
 	<string>
 	<mutex>
 
-1492438326 source:/home/colin/Development/PriceMomentumSingleSec_Dev/RHApiCPP.cpp
+1495427311 source:/home/colin/Development/PriceMomentumSingleSec_Dev/RHApiCPP.cpp
 	"RHApiCPP.hpp"
 
 1491187321 source:/home/colin/Development/PriceMomentumSingleSec_Dev/RHApiPy.cpp
@@ -39475,4 +39475,11 @@
 
 1491758319 source:/home/colin/Development/PriceMomentumSingleSec_Dev/RHApiCPP2.cpp
 	"RHApiCPP2.hpp"
+
+1493956780 /home/colin/Development/PriceMomentumSingleSec_Dev/Utility.hpp
+	<string>
+	<ctime>
+
+1493956189 source:/home/colin/Development/PriceMomentumSingleSec_Dev/Utility.cpp
+	"Utility.hpp"
 

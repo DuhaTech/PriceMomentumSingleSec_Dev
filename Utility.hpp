@@ -1,5 +1,7 @@
-#ifndef BROKERUTIL_HPP
-#define BROKERUTIL_HPP
+#ifndef UTILITY_HPP
+#define UTILITY_HPP
+#include <string>
+#include <ctime>
 
 namespace util
 {
@@ -13,6 +15,17 @@ namespace util
         CloseLongPosition = 3,
         CloseShortPosition = 4,
     };
+
+    class Utility
+    {
+    private:
+        time_t currentTimeT;
+        struct tm currentTimeStruct;
+
+public:
+    std::string GetCurrentDateTimeStr();
+    };
+
 }
 
-#endif // BROKERUTIL_HPP
+#endif // UTILITY_HPP
